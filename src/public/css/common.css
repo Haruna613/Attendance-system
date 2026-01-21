@@ -1,0 +1,136 @@
+.body {
+    margin: 0;
+    background-color: #ebedee;
+}
+
+.header {
+    width: 100%;
+    height: 60px;
+    background-color: #000;
+    display: flex;
+}
+
+.header__inner {
+    width: 100%;
+    display: flex;
+}
+
+.header__inner-item {
+    background-color: #000;
+    display: flex;
+}
+
+.header__inner-item:first-child {
+    width: 55%;
+}
+
+.header__inner-item:last-child {
+    width: 45%;
+    justify-content: flex-end;
+    padding-right: 2%;
+}
+
+.header__inner-item--logo {
+    width: 40%;
+    height: auto;
+    margin: 15px 0 15px 15px;
+}
+
+.header__inner-item--nav{
+    width: 25%;
+    margin: 0;
+    text-align: center;
+    align-self: center;
+    font-weight: bold;
+}
+
+.header__inner-item--nav-link{
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+}
+
+.header__inner-item--nav-form-button{
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    background-color: #000;
+    font-weight: bold;
+}
+
+@media screen and (max-width: 768px) {
+    .header {
+        height: 50px;
+    }
+
+    .header__inner-item:first-child {
+        width: 50%;
+    }
+
+    .header__inner-item:last-child {
+        width: 50%;
+        justify-content: flex-end;
+        padding-right: 2%;
+    }
+
+    .header__inner-item--logo {
+        width: 50%;
+        height: auto;
+        margin: 15px 0 15px 15px;
+    }
+
+    .header__inner-item--nav {
+        width: 25%;
+        margin: 0;
+        text-align: center;
+        align-self: center;
+    }
+
+    .header__inner-item--nav-link {
+        font-size: 12px;
+    }
+
+    .header__inner-item--nav-form-button {
+        font-size: 12px;
+        padding: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header {
+        height: 30px;
+    }
+
+    .header__inner-item:first-child {
+        width: 50%;
+    }
+
+    .header__inner-item:last-child {
+        width: 50%;
+        justify-content: flex-end;
+        padding-right: 2%;
+    }
+
+    .header__inner-item--logo {
+        width: 50%;
+        height: auto;
+        margin: 10px 0 10px 10px;
+    }
+
+    .header__inner-item--nav {
+        width: 25%;
+        margin: 0;
+        text-align: center;
+        align-self: center;
+    }
+
+    .header__inner-item--nav-link {
+        font-size: 8px;
+    }
+
+    .header__inner-item--nav-form-button {
+        font-size: 8px;
+        padding: 0;
+    }
+}

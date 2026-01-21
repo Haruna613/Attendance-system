@@ -1,0 +1,134 @@
+.main__inner__title {
+    border-left: 8px solid #000;
+    width: 72%;
+    margin: 60px auto 50px auto;
+    padding-left: 10px;
+}
+
+.tabs{
+    width: 70%;
+    margin: 0 auto 50px auto;
+    display: flex;
+    border-bottom: 2px solid #8e8c8c;
+}
+
+.tab-link{
+    padding: 10px 50px;
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
+
+.correction-list-table{
+    width: 70%;
+    border-collapse: collapse;
+    background-color: #fff;
+    margin: 0 auto 40px auto;
+    border-radius: 8px;
+    letter-spacing: 0.02em;
+}
+
+.correction-list-table-head{
+    border-bottom: 3px solid #ebedee;
+    color: #8e8c8c;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.correction-list-table-body-item{
+    border-bottom: 2px solid #ebedee;
+    color: #8e8c8c;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 768px) {
+    .main__inner__title {
+        border-left: 5px solid #000;
+        width: 92%;
+        margin: 30px auto 20px auto;
+        padding-left: 10px;
+        font-size: 18px;
+    }
+
+    .tabs {
+        width: 90%;
+        margin: 0 auto 20px auto;
+        font-size: 14px;
+    }
+
+    .tab-link {
+        padding: 10px 20px;
+    }
+
+    .correction-list-table {
+        width: 90%;
+        border-collapse: collapse;
+        background-color: #fff;
+        margin: 0 auto 40px auto;
+        border-radius: 8px;
+        letter-spacing: 0.01em;
+    }
+
+    .correction-list-table-head {
+        border-bottom: 3px solid #ebedee;
+        color: #8e8c8c;
+        font-size: 10px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .correction-list-table-body-item {
+        border-bottom: 2px solid #ebedee;
+        color: #8e8c8c;
+        font-weight: bold;
+        font-size: 10px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main__inner__title {
+        border-left: 5px solid #000;
+        width: 92%;
+        margin: 30px auto 20px auto;
+        padding-left: 10px;
+        font-size: 18px;
+    }
+
+    .tabs {
+        width: 90%;
+        margin: 0 auto 20px auto;
+        font-size: 14px;
+    }
+
+    .tab-link {
+        padding: 10px 20px;
+    }
+
+    .correction-list-table {
+        width: 90%;
+        border-collapse: collapse;
+        background-color: #fff;
+        margin: 0 auto 40px auto;
+        border-radius: 8px;
+        letter-spacing: 0.01em;
+    }
+
+    .correction-list-table-head {
+        border-bottom: 3px solid #ebedee;
+        color: #8e8c8c;
+        font-size: 7px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .correction-list-table-body-item {
+        border-bottom: 2px solid #ebedee;
+        color: #8e8c8c;
+        font-weight: bold;
+        font-size: 7px;
+        text-align: center;
+    }
+}

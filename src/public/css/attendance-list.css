@@ -1,0 +1,150 @@
+.main__inner__title{
+    border-left: 8px solid #000;
+    width: 62%;
+    margin: 100px auto 50px auto;
+    padding-left: 10px;
+}
+
+.attendance-list__header{
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin: 0 auto 40px auto;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.attendance-list__nav-link--prev{
+    color: #8e8c8c;
+    font-weight: bold;
+    margin-left: 20px;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+}
+
+.attendance-list__current-month{
+    font-size: 18px;
+}
+
+.attendance-list__nav-link--next{
+    color: #8e8c8c;
+    font-weight: bold;
+    margin-right: 20px;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+}
+
+.attendance-list__table{
+    width: 60%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    margin: 0 auto 40px auto;
+    background-color: #fff;
+    border-radius: 8px;
+}
+
+.attendance-list__table-head{
+    border-bottom: 4px solid #ebedee;
+    color: #8e8c8c;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.attendance-list__table-body{
+    text-align: center;
+}
+
+.attendance-list__table-body-item{
+    border-bottom: 2px solid #ebedee;
+    color: #8e8c8c;
+    font-weight: bold;
+    letter-spacing: 0.15em;
+    font-size: 16px;
+}
+
+.attendance-list__detail-link{
+    color: #000;
+    text-decoration: none;
+}
+
+@media screen and (max-width: 768px){
+    .main__inner__title {
+        width: 72%;
+        margin: 50px auto 30px auto;
+        padding-left: 5px;
+        font-size: 24px;
+    }
+
+    .attendance-list__header {
+        width: 70%;
+        margin: 0 auto 20px auto;
+    }
+
+    .attendance-list__nav-link--prev {
+        font-size: 14px;
+    }
+
+    .attendance-list__current-month {
+        font-size: 14px;
+    }
+
+    .attendance-list__nav-link--next {
+        font-size: 14px;
+    }
+
+    .attendance-list__table {
+        width: 70%;
+    }
+
+    .attendance-list__table-head {
+        font-size: 14px;
+    }
+
+    .attendance-list__table-body-item {
+        letter-spacing: 0.02em;
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .main__inner__title {
+        border-left: 6px solid #000;
+        width: 92%;
+        margin: 50px auto 20px auto;
+        padding-left: 5px;
+        font-size: 18px;
+    }
+
+    .attendance-list__header {
+        width: 90%;
+        margin: 0 auto 20px auto;
+    }
+
+    .attendance-list__nav-link--prev {
+        font-size: 14px;
+    }
+
+    .attendance-list__current-month {
+        font-size: 14px;
+    }
+
+    .attendance-list__nav-link--next {
+        font-size: 14px;
+    }
+
+    .attendance-list__table {
+        width: 90%;
+    }
+
+    .attendance-list__table-head {
+        font-size: 12px;
+    }
+
+    .attendance-list__table-body-item {
+        letter-spacing: 0.02em;
+        font-size: 10px;
+    }
+}
