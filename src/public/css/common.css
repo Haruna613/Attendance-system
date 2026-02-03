@@ -21,11 +21,11 @@
 }
 
 .header__inner-item:first-child {
-    width: 55%;
+    width: 50%;
 }
 
 .header__inner-item:last-child {
-    width: 45%;
+    width: 50%;
     justify-content: flex-end;
     padding-right: 2%;
 }
@@ -65,11 +65,11 @@
     }
 
     .header__inner-item:first-child {
-        width: 50%;
+        width: 40%;
     }
 
     .header__inner-item:last-child {
-        width: 50%;
+        width: 60%;
         justify-content: flex-end;
         padding-right: 2%;
     }
@@ -103,11 +103,11 @@
     }
 
     .header__inner-item:first-child {
-        width: 50%;
+        width: 40%;
     }
 
     .header__inner-item:last-child {
-        width: 50%;
+        width: 60%;
         justify-content: flex-end;
         padding-right: 2%;
     }

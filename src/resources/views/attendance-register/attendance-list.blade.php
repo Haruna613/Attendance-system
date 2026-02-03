@@ -9,7 +9,10 @@
     <h1 class="main__inner__title">勤怠一覧</h1>
     <div class="attendance-list__header">
         <a class="attendance-list__nav-link--prev" href="{{ route('attendance.list', ['month' => $prevMonth]) }}">←前月</a>
-        <h2 class="attendance-list__current-month">{{ $currentDate->format('Y/m') }}</h2>
+        <div class="attendance-list__current-month">
+            <img class="calendar-image" src="{{ asset('images/カレンダー.png') }}" alt="ロゴ">
+            <h2>{{ $currentDate->format('Y/m') }}</h2>
+        </div>
         <a class="attendance-list__nav-link--next" href="{{ route('attendance.list', ['month' => $nextMonth]) }}">翌月→</a>
     </div>
     <table class="attendance-list__table">

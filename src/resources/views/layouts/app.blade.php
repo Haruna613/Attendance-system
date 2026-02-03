@@ -15,6 +15,25 @@
             <div class="header__inner-item">
                 <img class="header__inner-item--logo" src="{{ asset('images/COACHTECH.png') }}" alt="ロゴ">
             </div>
+            @if(auth()->user()->role === 1)
+            <div class="header__inner-item">
+                <div class="header__inner-item--nav">
+                    <a class="header__inner-item--nav-link" href="{{ route('admin.attendance.all') }}">勤怠一覧</a>
+                </div>
+                <div class="header__inner-item--nav">
+                    <a class="header__inner-item--nav-link" href="{{ route('staff.list') }}">スタッフ一覧</a>
+                </div>
+                <div class="header__inner-item--nav">
+                    <a class="header__inner-item--nav-link" href="{{ route('attendance.correction.list') }}">申請一覧</a>
+                </div>
+                <div class="header__inner-item--nav">
+                    <form class="header__inner-item--nav-form" action="/logout" method="post">
+                        @csrf
+                        <button class="header__inner-item--nav-form-button" type="submit">ログアウト</button>
+                    </form>
+                </div>
+            </div>
+            @else
             <div class="header__inner-item">
                 <div class="header__inner-item--nav">
                     <a class="header__inner-item--nav-link" href="{{ route('attendance.register') }}">勤怠</a>
@@ -32,6 +51,7 @@
                     </form>
                 </div>
             </div>
+            @endif
         </div>
     </header>
     <main class="main">

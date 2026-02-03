@@ -8,6 +8,10 @@
 <div class="main__inner">
     <h1 class="main__inner__title">申請一覧</h1>
 
+    @php
+        $isAdmin = auth()->user()->role === 1;
+    @endphp
+
     <div class="tabs">
         <a class="tab-link" href="{{ route('attendance.correction.list', ['tab' => 'pending']) }}" style="color: {{ $tab === 'pending' ? '#000' : '#888' }};">
             承認待ち
@@ -43,7 +47,19 @@
                     {{ $attendance->updated_at->format('Y/m/d') }}
                 </td>
                 <td style="width: 10%; padding: 10px 0;">
-                    <a href="{{ route('attendance.detail', $attendance->id) }}" style="color: #000; text-decoration: none;">詳細</a>
+                    @if($attendance->status == 1)
+                        @if($isAdmin)
+                            <a href="{{ route('attendance.correction.approve.form', $attendance->id) }}" style="text-decoration: none; color: #000;">詳細</a>
+                        @else
+                            <a href="{{ route('attendance.detail', $attendance->id) }}" style="text-decoration: none; color: #000;">詳細</a>
+                        @endif
+                    @else
+                        @if($isAdmin)
+                            <a href="{{ route('attendance.correction.approve.form', $attendance->id) }}" style="text-decoration: none; color: #000;">詳細</a>
+                        @else
+                            <a href="{{ route('attendance.detail', $attendance->id) }}" style="text-decoration: none; color: #000;">詳細</a>
+                        @endif
+                    @endif
                 </td>
             </tr>
             @empty

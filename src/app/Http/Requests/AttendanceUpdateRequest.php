@@ -50,32 +50,40 @@ class AttendanceUpdateRequest extends FormRequest
             $out = $this->punch_out;
 
             if ($in && $out && $in >= $out) {
-                $validator->errors()->add('punch_in', '出勤時間もしくは退勤時間が不適切な値です');
+                $validator->errors()->add('punch_out', '出勤時間もしくは退勤時間が不適切な値です');
             }
 
-            $checkRest = function ($restData, $isNew = false) use ($validator, $in, $out) {
-                foreach ($restData as $rest) {
+            // 既存の休憩チェック
+            if ($this->has('rests')) {
+                foreach ($this->rests as $id => $rest) {
                     $rStart = $rest['start'] ?? null;
                     $rEnd = $rest['end'] ?? null;
 
-                    if ($rStart) {
-                        if ($rStart < $in || ($out && $rStart > $out)) {
-                            $validator->errors()->add('rests', '休憩時間が不適切な値です');
-                        }
+                    if ($rStart && ($rStart < $in || ($out && $rStart > $out))) {
+                        // Blade側の @error("rests.{$rest->id}.start") に合わせる
+                        $validator->errors()->add("rests.$id.start", '休憩時間が不適切な値です');
                     }
-
-                    if ($rEnd) {
-                        if ($out && $rEnd > $out) {
-                            $validator->errors()->add('rests', '休憩時間もしくは退勤時間が不適切な値です');
-                        }
-                        if ($rStart && $rStart >= $rEnd) {
-                            $validator->errors()->add('rests', '休憩時間の開始と終了が不適切です');
-                        }
+                    if ($rEnd && $out && $rEnd > $out) {
+                        $validator->errors()->add("rests.$id.end", '休憩時間もしくは退勤時間が不適切な値です');
                     }
                 }
-            };
-            if ($this->has('rests')) $checkRest($this->rests);
-            if ($this->has('new_rests')) $checkRest($this->new_rests, true);
+            }
+
+            // 新規の休憩チェック
+            if ($this->has('new_rests')) {
+                foreach ($this->new_rests as $index => $rest) {
+                    $rStart = $rest['start'] ?? null;
+                    $rEnd = $rest['end'] ?? null;
+
+                    if ($rStart && ($rStart < $in || ($out && $rStart > $out))) {
+                        // Blade側の @error("new_rests.{$i}.start") に合わせる
+                        $validator->errors()->add("new_rests.$index.start", '休憩時間が不適切な値です');
+                    }
+                    if ($rEnd && $out && $rEnd > $out) {
+                        $validator->errors()->add("new_rests.$index.end", '休憩時間もしくは退勤時間が不適切な値です');
+                    }
+                }
+            }
         });
     }
 }

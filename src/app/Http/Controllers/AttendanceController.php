@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\Rest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Http\Requests\AttendanceUpdateRequest;
@@ -189,32 +190,81 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function edit($idOrDate)
+    public function edit(Request $request, $idOrDate)
     {
         if (is_numeric($idOrDate)) {
             $attendance = Attendance::with(['user', 'rests'])->findOrFail($idOrDate);
         } else {
+            $targetUserId = $request->query('user_id', Auth::id());
+            $targetUser = User::findOrFail($targetUserId);
+
+            $attendance = Attendance::with(['user', 'rests'])
+            ->where('user_id', $targetUserId)
+            ->where('date', $idOrDate)
+            ->first();
+
+            if (!$attendance) {
             $attendance = new Attendance([
                 'date' => $idOrDate,
-                'user_id' => Auth::id(),
+                'user_id' => $targetUserId,
                 'status' => 0
             ]);
+
             $attendance->setRelation('rests', collect());
-            $attendance->setRelation('user', Auth::user());
+            $attendance->setRelation('user', $targetUser);
+            }
         }
 
         return view('attendance-register/attendance-detail', compact('attendance'));
     }
 
+    public function store(AttendanceUpdateRequest $request)
+    {
+        $user = auth()->user();
+        $isAdmin = ($user->role === 1);
+
+        $attendance = Attendance::create([
+            'user_id' => $isAdmin ? $request->user_id : auth()->id(),
+            'date' => $request->date,
+            'punch_in' => $request->punch_in,
+            'punch_out' => $request->punch_out,
+            'remarks' => $request->remarks,
+            'status' => $isAdmin ? 0 : 1,
+            'applied_at' => $isAdmin ? null : now(),
+        ]);
+
+        if ($request->has('new_rests')) {
+            foreach ($request->new_rests as $rest_time) {
+                if (!empty($rest_time['start']) && !empty($rest_time['end'])) {
+                    $attendance->rests()->create([
+                        'start_time' => $rest_time['start'],
+                        'end_time' => $rest_time['end'],
+                    ]);
+                }
+            }
+        }
+
+        if ($isAdmin) {
+            return redirect()->route('admin.attendance.list', ['id' => $attendance->user_id])
+                         ->with('success', '勤怠情報を登録しました。');
+        }
+
+        return redirect()->route('attendance.list')->with('success', '勤怠登録の申請を出しました。');
+    }
+
     public function update(AttendanceUpdateRequest $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
+        $user = auth()->user();
+
+        $isAdmin = ($user->role === 1);
 
         $attendance->update([
             'punch_in' => $request->punch_in,
             'punch_out' => $request->punch_out,
             'remarks' => $request->remarks,
-            'status' => 1,
+            'status' => $isAdmin ? 0 : 1,
+            'applied_at' => now(),
         ]);
 
         if ($request->has('rests')) {
@@ -237,43 +287,151 @@ class AttendanceController extends Controller
             }
         }
 
+        if ($isAdmin) {
+            return redirect()->route('admin.attendance.list', ['id' => $attendance->user_id])
+                ->with('success', '勤怠情報を更新しました。');
+        }
+
         return redirect()->route('attendance.list')->with('success', '修正申請を送信しました。管理者の承認をお待ちください。');
     }
 
-    public function store(AttendanceUpdateRequest $request)
+    public function approveForm(Request $request, $id)
     {
-        $attendance = Attendance::create([
-            'user_id' => Auth::id(),
-            'date' => $request->date,
-            'punch_in' => $request->punch_in,
-            'punch_out' => $request->punch_out,
-            'remarks' => $request->remarks,
-            'status' => 1,
-        ]);
+        $attendance = Attendance::with(['user', 'rests'])->findOrFail($id);
 
-        if ($request->has('new_rests')) {
-            foreach ($request->new_rests as $rest_time) {
-                if (!empty($rest_time['start']) && !empty($rest_time['end'])) {
-                    $attendance->rests()->create([
-                        'start_time' => $rest_time['start'],
-                        'end_time' => $rest_time['end'],
-                    ]);
-                }
-            }
-        }
+        return view('admin.attendance-correction-approve', compact('attendance'));
+    }
 
-        return redirect()->route('attendance.list')->with('success', '勤怠登録の申請を出しました。');
+    public function approve(Request $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        $attendance->status = 0;
+        $attendance->save();
+
+        return redirect()->route('admin.attendance.list', ['id' => $attendance->user_id])
+                     ->with('success', '申請を承認しました。');
+    }
+
+    public function adminDailyIndex(Request $request)
+    {
+        $date = $request->query('date', now()->format('Y-m-d'));
+
+        $attendances = Attendance::where('date', $date)
+            ->with('user')
+            ->get();
+
+        return view('admin.daily-attendance', compact('attendances', 'date'));
     }
 
     public function correctionList(Request $request)
     {
         $tab = $request->query('tab', 'pending');
-        $status = ($tab === 'approved') ? 2 : 1;
-        $requests = Attendance::where('status', $status)
-            ->with('user')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        $user = auth()->user();
+
+        $query = Attendance::with('user');
+
+        if ($user->role !== 1) {
+            $query->where('user_id', $user->id);
+        }
+
+        if ($tab === 'approved') {
+            $requests = $query->where('status', 0)
+                            ->whereNotNull('applied_at')
+                            ->orderBy('updated_at', 'desc')
+                            ->get();
+        } else {
+            $requests = $query->where('status', 1)
+                            ->orderBy('updated_at', 'desc')
+                            ->get();
+        }
 
         return view('attendance-register.correction-list', compact('requests', 'tab'));
+    }
+
+    public function staffList(Request $request)
+    {
+        $staff = User::where('role', 0)->get();
+
+        return view('admin.staff-list', compact('staff'));
+    }
+
+    public function attendanceList(Request $request,$id)
+    {
+        $user = User::findOrFail($id);
+        $monthParam = $request->query('month', Carbon::now()->format('Y-m'));
+        $currentDate = Carbon::parse($monthParam)->startOfMonth();
+
+        $prevMonth = $currentDate->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentDate->copy()->addMonth()->format('Y-m');
+
+        $daysInMonth = $currentDate->daysInMonth;
+        $calendar = [];
+
+        $attendances = Attendance::where('user_id', $id)
+            ->whereYear('date', $currentDate->year)
+            ->whereMonth('date', $currentDate->month)
+            ->get()
+            ->keyBy('date');
+
+        for ($i = 0; $i < $daysInMonth; $i++) {
+        $date = $currentDate->copy()->addDays($i)->format('Y-m-d');
+        $calendar[] = $attendances->get($date) ?? (object)[
+            'date' => $date,
+            'punch_in' => null,
+            'punch_out' => null,
+            'total_rest_time' => null,
+            'actual_working_time' => null,
+            'id' => null
+        ];
+    }
+
+        return view('admin.attendance-staff-list', compact(
+            'user',
+            'calendar',
+            'currentDate',
+            'prevMonth',
+            'nextMonth'
+        ));
+    }
+
+    public function exportCsv(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $month = $request->query('month', now()->format('Y-m'));
+        $date = \Carbon\Carbon::parse($month);
+
+        $attendances = Attendance::where('user_id', $id)
+            ->whereYear('date', $date->year)
+            ->whereMonth('date', $date->month)
+            ->get()
+            ->keyBy('date');
+
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename={$user->name}_{$month}_勤怠.csv",
+        ];
+
+        $callback = function() use ($attendances) {
+            $file = fopen('php://output', 'w');
+            fputs($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            fputcsv($file, ['日付', '出勤', '退勤', '休憩時間', '合計勤務時間']);
+
+            for ($i = 0; $i < $date->daysInMonth; $i++) {
+                $currentDay = $date->copy()->addDays($i)->format('Y-m-d');
+                $row = $attendances->get($currentDay);
+
+                fputcsv($file, [
+                    $currentDay,
+                    $row && $row->punch_in ? date('H:i', strtotime($row->punch_in)) : '',
+                    $row && $row->punch_out ? date('H:i', strtotime($row->punch_out)) : '',
+                    $row ? $row->total_rest_time : '',
+                    $row ? $row->actual_working_time : '',
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

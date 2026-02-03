@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -44,6 +45,27 @@ class FortifyServiceProvider extends ServiceProvider
         });
         Fortify::verifyEmailView(function () {
             return view('auth.verify-email');
+        });
+
+        Fortify::authenticateThrough(function ($request) {
+            return array_filter([
+                \Laravel\Fortify\Actions\AttemptToAuthenticate::class,
+                \Laravel\Fortify\Actions\EnsureLoginIsNotThrottled::class,
+                \Laravel\Fortify\Actions\PrepareAuthenticatedSession::class,
+            ]);
+        });
+
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+            public function toResponse($request)
+            {
+                $user = auth()->user();
+
+                if ($user->role === 1) {
+                    return redirect()->route('admin.attendance.all');
+                }
+
+                return redirect('/attendance');
+            }
         });
     }
 }
