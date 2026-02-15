@@ -39,13 +39,11 @@
                 <td style="padding: 10px 5px;">{{ $day->actual_working_time }}</td>
                 <td style="padding: 10px 5px;">
                     @if($day->id)
-                        <a class="attendance-list__detail-link" href="{{ route('attendance.detail', ['idOrDate' => ($day->id ?: $day->date), 'user_id' => $user->id]) }}">
+                        <a class="attendance-list__detail-link" href="{{ route('admin.attendance.detail', ['id' => $day->id]) }}">
                             詳細
                         </a>
                     @else
-                        <a class="attendance-list__detail-link" href="{{ route('attendance.detail', ['idOrDate' => $day->date, 'user_id' => $user->id]) }}">
-                            詳細
-                        </a>
+                        <span class="disabled-link" style="color: #000;">詳細</span>
                     @endif
                 </td>
             </tr>

@@ -53,14 +53,12 @@ class AttendanceUpdateRequest extends FormRequest
                 $validator->errors()->add('punch_out', '出勤時間もしくは退勤時間が不適切な値です');
             }
 
-            // 既存の休憩チェック
             if ($this->has('rests')) {
                 foreach ($this->rests as $id => $rest) {
                     $rStart = $rest['start'] ?? null;
                     $rEnd = $rest['end'] ?? null;
 
                     if ($rStart && ($rStart < $in || ($out && $rStart > $out))) {
-                        // Blade側の @error("rests.{$rest->id}.start") に合わせる
                         $validator->errors()->add("rests.$id.start", '休憩時間が不適切な値です');
                     }
                     if ($rEnd && $out && $rEnd > $out) {
@@ -69,14 +67,12 @@ class AttendanceUpdateRequest extends FormRequest
                 }
             }
 
-            // 新規の休憩チェック
             if ($this->has('new_rests')) {
                 foreach ($this->new_rests as $index => $rest) {
                     $rStart = $rest['start'] ?? null;
                     $rEnd = $rest['end'] ?? null;
 
                     if ($rStart && ($rStart < $in || ($out && $rStart > $out))) {
-                        // Blade側の @error("new_rests.{$i}.start") に合わせる
                         $validator->errors()->add("new_rests.$index.start", '休憩時間が不適切な値です');
                     }
                     if ($rEnd && $out && $rEnd > $out) {

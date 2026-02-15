@@ -190,30 +190,9 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function edit(Request $request, $idOrDate)
+    public function edit($id)
     {
-        if (is_numeric($idOrDate)) {
-            $attendance = Attendance::with(['user', 'rests'])->findOrFail($idOrDate);
-        } else {
-            $targetUserId = $request->query('user_id', Auth::id());
-            $targetUser = User::findOrFail($targetUserId);
-
-            $attendance = Attendance::with(['user', 'rests'])
-            ->where('user_id', $targetUserId)
-            ->where('date', $idOrDate)
-            ->first();
-
-            if (!$attendance) {
-            $attendance = new Attendance([
-                'date' => $idOrDate,
-                'user_id' => $targetUserId,
-                'status' => 0
-            ]);
-
-            $attendance->setRelation('rests', collect());
-            $attendance->setRelation('user', $targetUser);
-            }
-        }
+        $attendance = Attendance::with(['user', 'rests'])->findOrFail($id);
 
         return view('attendance-register/attendance-detail', compact('attendance'));
     }
@@ -395,11 +374,18 @@ class AttendanceController extends Controller
         ));
     }
 
+    public function showAttendanceDetail($id)
+    {
+        $attendance = Attendance::with('user')->findOrFail($id);
+
+        return view('attendance-register.attendance-detail', compact('attendance'));
+    }
+
     public function exportCsv(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $month = $request->query('month', now()->format('Y-m'));
-        $date = \Carbon\Carbon::parse($month);
+        $date = \Carbon\Carbon::parse($month)->startOfMonth();
 
         $attendances = Attendance::where('user_id', $id)
             ->whereYear('date', $date->year)
@@ -412,25 +398,28 @@ class AttendanceController extends Controller
             "Content-Disposition" => "attachment; filename={$user->name}_{$month}_勤怠.csv",
         ];
 
-        $callback = function() use ($attendances) {
-            $file = fopen('php://output', 'w');
-            fputs($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
-            fputcsv($file, ['日付', '出勤', '退勤', '休憩時間', '合計勤務時間']);
+        $callback = function() use ($attendances, $date) {
+        $file = fopen('php://output', 'w');
+        fputs($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+        fputcsv($file, ['日付', '出勤', '退勤', '休憩時間', '合計勤務時間']);
 
-            for ($i = 0; $i < $date->daysInMonth; $i++) {
-                $currentDay = $date->copy()->addDays($i)->format('Y-m-d');
-                $row = $attendances->get($currentDay);
+        $daysInMonth = $date->daysInMonth;
 
-                fputcsv($file, [
-                    $currentDay,
-                    $row && $row->punch_in ? date('H:i', strtotime($row->punch_in)) : '',
-                    $row && $row->punch_out ? date('H:i', strtotime($row->punch_out)) : '',
-                    $row ? $row->total_rest_time : '',
-                    $row ? $row->actual_working_time : '',
-                ]);
-            }
-            fclose($file);
-        };
+        for ($i = 0; $i < $daysInMonth; $i++) {
+            $currentDay = $date->copy()->addDays($i);
+            $dateString = $currentDay->format('Y-m-d');
+            $row = $attendances->get($dateString);
+
+            fputcsv($file, [
+                $currentDay->isoFormat('MM/DD(ddd)'),
+                $row && $row->punch_in ? date('H:i', strtotime($row->punch_in)) : '',
+                $row && $row->punch_out ? date('H:i', strtotime($row->punch_out)) : '',
+                $row ? $row->total_rest_time : '',
+                $row ? $row->actual_working_time : '',
+            ]);
+        }
+        fclose($file);
+    };
 
         return response()->stream($callback, 200, $headers);
     }

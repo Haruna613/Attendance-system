@@ -35,7 +35,11 @@
                 <td style="padding: 10px 5px;">{{ $day->total_rest_time }}</td>
                 <td style="padding: 10px 5px;">{{ $day->actual_working_time }}</td>
                 <td style="padding: 10px 5px;">
-                    <a class="attendance-list__detail-link" href="{{ route('attendance.detail', $day->id ?? $day->date) }}">詳細</a>
+                    @if($day->id)
+                        <a  class="attendance-list__detail-link" href="{{ route('attendance.detail', ['id' => $day->id]) }}">詳細</a>
+                    @else
+                        <span class="disabled-link" style="color: #000;">詳細</span>
+                    @endif
                 </td>
             </tr>
             @endforeach

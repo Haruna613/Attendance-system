@@ -65,13 +65,18 @@ class AdminUserControlTest extends TestCase
 
     public function test_admin_can_see_correct_detail_link()
     {
-        $today = Carbon::now()->format('Y-m-d');
+        $attendance = Attendance::factory()->create([
+            'user_id' => $this->targetUser->id,
+            'date' => now()->format('Y-m-d'),
+            'punch_in' => '09:00:00',
+            'punch_out' => '18:00:00',
+        ]);
 
         $response = $this->actingAs($this->adminUser)
                          ->get("/admin/attendance/staff/{$this->targetUser->id}");
 
         $response->assertStatus(200);
-        $response->assertSee("/attendance/detail/{$today}?user_id={$this->targetUser->id}");
+        $response->assertSee("/admin/attendance/{$attendance->id}");
     }
 
     public function test_admin_can_see_all_pending_requests()
