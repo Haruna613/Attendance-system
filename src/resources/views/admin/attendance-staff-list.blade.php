@@ -6,17 +6,24 @@
 
 @section('content')
 <div class="main__inner">
-    <h1 class="main__inner__title">{{ $user->name }}さんの勤怠一覧</h1>
+    <h1 class="main__inner-title">{{ $user->name }}さんの勤怠一覧</h1>
 
-    <div class="attendance-list__header">
-        <a class="attendance-list__nav-link--prev" href="{{ route('admin.attendance.list', ['id' => $user->id, 'month' => $prevMonth]) }}">←前月</a>
-        <div class="attendance-list__current-month">
-            <img class="calendar-image" src="{{ asset('images/カレンダー.png') }}" alt="ロゴ">
-            <h2>{{ $currentDate->format('Y/m') }}</h2>
-        </div>
-
-        <a class="attendance-list__nav-link--next" href="{{ route('admin.attendance.list', ['id' => $user->id, 'month' => $nextMonth]) }}">翌月→</a>
-    </div>
+    <nav class="attendance-list__header">
+        <ul class="attendance-list__header-content">
+            <li class="attendance-list__header-content-item">
+                <a class="attendance-list__nav-link--prev" href="{{ route('admin.attendance.list', ['id' => $user->id, 'month' => $prevMonth]) }}">←前月</a>
+            </li>
+            <li class="attendance-list__header-content-item">
+                <div class="attendance-list__current-month">
+                    <img class="calendar-image" src="{{ asset('images/カレンダー.png') }}" alt="ロゴ">
+                    <span class="attendance-list__current-date-text">{{ $currentDate->format('Y/m') }}</span>
+                </div>
+            </li>
+            <li class="attendance-list__header-content-item">
+                <a class="attendance-list__nav-link--next" href="{{ route('admin.attendance.list', ['id' => $user->id, 'month' => $nextMonth]) }}">翌月→</a>
+            </li>
+        </ul>
+    </nav>
 
     <table class="attendance-list__table">
         <thead class="attendance-list__table-head">

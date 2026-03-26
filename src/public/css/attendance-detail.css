@@ -1,4 +1,4 @@
-.main__inner__title{
+.main__inner-title{
     border-left: 8px solid #000;
     width: 62%;
     margin: 60px auto 50px auto;
@@ -18,7 +18,7 @@
     display: flex;
 }
 
-.attendance-detail__table-row__title{
+.attendance-detail__table-row--title{
     width: 40%;
     text-align: left;
     padding: 20px 50px;
@@ -27,14 +27,14 @@
     font-size: 16px;
 }
 
-.attendance-detail__table-row__value{
+.attendance-detail__table-row--value{
     width: 60%;
     font-weight: bold;
     font-size: 16px;
     padding: 20px 0;
 }
 
-.attendance-detail__table-row__value-year{
+.attendance-detail__table-row--value-year{
     width: 20%;
     font-weight: bold;
     font-size: 16px;
@@ -42,7 +42,7 @@
     display: block;
 }
 
-.attendance-detail__table-row__value-date{
+.attendance-detail__table-row--value-date{
     width: 20%;
     font-weight: bold;
     font-size: 16px;
@@ -126,7 +126,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .main__inner__title {
+    .main__inner-title {
         border-left: 5px solid #000;
         width: 92%;
         margin: 30px auto 20px auto;
@@ -143,14 +143,14 @@
         letter-spacing: 0.02em;
     }
 
-    .attendance-detail__table-row__title {
+    .attendance-detail__table-row--title {
         width: 40%;
         text-align: left;
         padding: 20px 20px;
         font-size: 14px;
     }
 
-    .attendance-detail__table-row__value {
+    .attendance-detail__table-row--value {
         width: 60%;
         font-weight: bold;
         font-size: 14px;
@@ -158,13 +158,13 @@
         display: inline;
     }
 
-    .attendance-detail__table-row__value-year {
+    .attendance-detail__table-row--value-year {
         font-size: 14px;
         padding: 20px 0;
         display: block;
     }
 
-    .attendance-detail__table-row__value-date {
+    .attendance-detail__table-row--value-date {
         font-size: 14px;
         padding: 20px 0;
         display: block;
@@ -205,7 +205,7 @@
 }
 
 @media screen and (max-width: 480px) {
-    .main__inner__title {
+    .main__inner-title {
         border-left: 5px solid #000;
         width: 92%;
         margin: 30px auto 20px auto;
@@ -222,14 +222,14 @@
         letter-spacing: 0.02em;
     }
 
-    .attendance-detail__table-row__title {
+    .attendance-detail__table-row--title {
         width: 40%;
         text-align: left;
         padding: 20px 20px;
         font-size: 14px;
     }
 
-    .attendance-detail__table-row__value {
+    .attendance-detail__table-row--value {
         width: 60%;
         font-weight: bold;
         font-size: 14px;
@@ -237,13 +237,13 @@
         display: inline;
     }
 
-    .attendance-detail__table-row__value-year {
+    .attendance-detail__table-row--value-year {
         font-size: 14px;
         padding: 20px 0;
         display: block;
     }
 
-    .attendance-detail__table-row__value-date {
+    .attendance-detail__table-row--value-date {
         font-size: 14px;
         padding: 20px 0;
         display: block;

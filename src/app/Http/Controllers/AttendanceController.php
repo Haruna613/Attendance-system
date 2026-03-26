@@ -225,7 +225,7 @@ class AttendanceController extends Controller
 
         if ($isAdmin) {
             return redirect()->route('admin.attendance.list', ['id' => $attendance->user_id])
-                         ->with('success', '勤怠情報を登録しました。');
+                    ->with('success', '勤怠情報を登録しました。');
         }
 
         return redirect()->route('attendance.list')->with('success', '勤怠登録の申請を出しました。');
@@ -289,7 +289,7 @@ class AttendanceController extends Controller
         $attendance->save();
 
         return redirect()->route('admin.attendance.list', ['id' => $attendance->user_id])
-                     ->with('success', '申請を承認しました。');
+                    ->with('success', '申請を承認しました。');
     }
 
     public function adminDailyIndex(Request $request)

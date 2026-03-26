@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="main__inner">
-    <h1 class="main__inner__title">勤怠詳細</h1>
+    <h1 class="main__inner-title">勤怠詳細</h1>
 
     @php
         $isNew = is_null($attendance->id);
@@ -27,21 +27,21 @@
 
         <table class="attendance-detail__table">
             <tr class="attendance-detail__table-row">
-                <th class="attendance-detail__table-row__title">名前</th>
-                <td class="attendance-detail__table-row__value">{{ $attendance->user->name }}</td>
+                <th class="attendance-detail__table-row--title">名前</th>
+                <td class="attendance-detail__table-row--value">{{ $attendance->user->name }}</td>
             </tr>
             <tr class="attendance-detail__table-row">
-                <th class="attendance-detail__table-row__title">日付</th>
-                <td class="attendance-detail__table-row__value-year">
+                <th class="attendance-detail__table-row--title">日付</th>
+                <td class="attendance-detail__table-row--value-year">
                     {{ \Carbon\Carbon::parse($attendance->date)->isoFormat('YYYY年') }}
                 </td>
-                <td class="attendance-detail__table-row__value-date">
+                <td class="attendance-detail__table-row--value-date">
                     {{ \Carbon\Carbon::parse($attendance->date)->isoFormat('M月D日') }}
                 </td>
             </tr>
             <tr class="attendance-detail__table-row">
-                <th class="attendance-detail__table-row__title">出勤・退勤</th>
-                <td class="attendance-detail__table-row__value">
+                <th class="attendance-detail__table-row--title">出勤・退勤</th>
+                <td class="attendance-detail__table-row--value">
                     <div class="time-group">
                         <span class="time-group--item">
                             @if($isPending)
@@ -66,8 +66,8 @@
 
             @foreach($attendance->rests as $index => $rest)
             <tr class="attendance-detail__table-row">
-                <th class="attendance-detail__table-row__title">休憩{{ $index + 1 }}</th>
-                <td class="attendance-detail__table-row__value">
+                <th class="attendance-detail__table-row--title">休憩{{ $index + 1 }}</th>
+                <td class="attendance-detail__table-row--value">
                     <div class="time-group">
                         @if($isPending)
                             <span class="time-group--item">
@@ -96,8 +96,8 @@
                 @endphp
                 @for ($i = 0; $i < $newSlots; $i++)
                 <tr class="attendance-detail__table-row">
-                    <th class="attendance-detail__table-row__title">休憩{{ $existingCount + $i + 1 }}</th>
-                    <td class="attendance-detail__table-row__value">
+                    <th class="attendance-detail__table-row--title">休憩{{ $existingCount + $i + 1 }}</th>
+                    <td class="attendance-detail__table-row--value">
                         <div class="time-group">
                             <span class="time-group--item">
                                 <input class="time-input" type="time" name="new_rests[{{ $i }}][start]">
@@ -115,8 +115,8 @@
             @endif
 
             <tr class="attendance-detail__table-row">
-                <th class="attendance-detail__table-row__title">備考</th>
-                <td class="attendance-detail__table-row__value">
+                <th class="attendance-detail__table-row--title">備考</th>
+                <td class="attendance-detail__table-row--value">
                     @if($isPending)
                         <p class="display-value">{{ $attendance->remarks }}</p>
                     @else

@@ -1,4 +1,4 @@
-.main__inner__title {
+.main__inner-title {
     border-left: 8px solid #000;
     width: 72%;
     margin: 60px auto 50px auto;
@@ -45,7 +45,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .main__inner__title {
+    .main__inner-title {
         border-left: 5px solid #000;
         width: 92%;
         margin: 30px auto 20px auto;
@@ -89,7 +89,7 @@
 }
 
 @media screen and (max-width: 480px) {
-    .main__inner__title {
+    .main__inner-title {
         border-left: 5px solid #000;
         width: 92%;
         margin: 30px auto 20px auto;

@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="main__inner">
-    <h1 class="main__inner__title">{{ \Carbon\Carbon::parse($date)->isoFormat('YYYY年M月D日') }}の勤怠</h1>
+    <h1 class="main__inner-title">{{ \Carbon\Carbon::parse($date)->isoFormat('YYYY年M月D日') }}の勤怠</h1>
     @php
         $current = \Carbon\Carbon::parse($date);
         $prevDay = $current->copy()->subDay()->format('Y-m-d');

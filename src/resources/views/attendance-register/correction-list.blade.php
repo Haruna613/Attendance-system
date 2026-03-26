@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="main__inner">
-    <h1 class="main__inner__title">申請一覧</h1>
+    <h1 class="main__inner-title">申請一覧</h1>
 
     @php
         $isAdmin = auth()->user()->role === 1;

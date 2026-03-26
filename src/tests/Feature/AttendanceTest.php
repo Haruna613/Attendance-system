@@ -365,7 +365,7 @@ class AttendanceTest extends TestCase
 
         $attendance = Attendance::create([
             'user_id' => $user->id,
-            'date' => '2026-02-01',
+            'date' => '2026-03-01',
             'punch_in' => '09:00:00'
         ]);
 
